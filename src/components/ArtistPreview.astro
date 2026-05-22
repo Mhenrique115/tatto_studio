@@ -1,6 +1,7 @@
 ---
 import { artist } from '../data/artist';
 import SectionTitle from './SectionTitle.astro';
+import { withBase } from '../utils/basePath';
 ---
 
 <section class="section artist-preview bg-texture" id="artista">
@@ -47,7 +48,7 @@ import SectionTitle from './SectionTitle.astro';
         </div>
 
         <div class="artist-actions">
-          <a href="/artista" class="btn btn--gold">Ver Perfil Completo</a>
+          <a href={withBase('/artista')} class="btn btn--gold">Ver Perfil Completo</a>
         </div>
       </div>
     </div>

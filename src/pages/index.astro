@@ -13,6 +13,7 @@ import SectionTitle from '../components/SectionTitle.astro';
 import { siteConfig } from '../data/siteConfig';
 import { tattoos, tattooCategories } from '../data/arts';
 import { piercings } from '../data/piercings';
+import { withBase } from '../utils/basePath';
 ---
 
 <BaseLayout>
@@ -59,7 +60,7 @@ import { piercings } from '../data/piercings';
     <div class="container">
       <div class="section-header-row">
         <SectionTitle label="Galeria" title="Nossas Artes" subtitle="Uma seleção dos nossos melhores trabalhos." />
-        <a href="/artes" class="btn btn--outline">Ver Galeria Completa</a>
+        <a href={withBase('/artes')} class="btn btn--outline">Ver Galeria Completa</a>
       </div>
       <ArtGallery tattoos={tattoos} categories={tattooCategories} preview={true} />
     </div>
@@ -71,7 +72,7 @@ import { piercings } from '../data/piercings';
       <div class="container">
         <div class="section-header-row">
           <SectionTitle label="Serviços" title="Piercings" subtitle="Piercings realizados com materiais certificados e técnica segura." />
-          <a href="/piercing" class="btn btn--outline">Ver Todos</a>
+          <a href={withBase('/piercing')} class="btn btn--outline">Ver Todos</a>
         </div>
         <div class="gallery-grid">
           {piercings.slice(0, 4).map(p => (

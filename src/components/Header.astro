@@ -1,5 +1,6 @@
 ---
 import { siteConfig } from '../data/siteConfig';
+import { withBase } from '../utils/basePath';
 
 const navLinks = [
   { label: 'Início', href: '/' },
@@ -9,11 +10,15 @@ const navLinks = [
 ];
 
 const currentPath = Astro.url.pathname;
+const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
+const currentRoute = basePath && currentPath.startsWith(basePath)
+  ? currentPath.slice(basePath.length) || '/'
+  : currentPath;
 ---
 
 <header class="site-header" id="site-header">
   <div class="container header-inner">
-    <a href="/" class="header-logo">
+    <a href={withBase('/')} class="header-logo">
       <span class="logo-mark">✦</span>
       <span class="logo-text">{siteConfig.name}</span>
     </a>
@@ -21,8 +26,8 @@ const currentPath = Astro.url.pathname;
     <nav class="header-nav" aria-label="Navegação principal">
       {navLinks.map(link => (
         <a
-          href={link.href}
-          class:list={['nav-link', { active: currentPath === link.href || (link.href !== '/' && currentPath.startsWith(link.href)) }]}
+          href={withBase(link.href)}
+          class:list={['nav-link', { active: currentRoute === link.href || (link.href !== '/' && currentRoute.startsWith(link.href)) }]}
         >
           {link.label}
         </a>
@@ -47,7 +52,7 @@ const currentPath = Astro.url.pathname;
 
   <nav class="mobile-nav" id="mobile-nav" aria-hidden="true">
     {navLinks.map(link => (
-      <a href={link.href} class="mobile-nav-link">{link.label}</a>
+      <a href={withBase(link.href)} class="mobile-nav-link">{link.label}</a>
     ))}
     <a
       href={`https://wa.me/${siteConfig.contact.whatsapp}?text=${encodeURIComponent('Olá! Quero agendar uma tatuagem.')}`}

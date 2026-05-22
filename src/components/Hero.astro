@@ -1,5 +1,6 @@
 ---
 import { siteConfig } from '../data/siteConfig';
+import { withBase } from '../utils/basePath';
 
 interface Props {
   title?: string;
@@ -38,7 +39,7 @@ const whatsappUrl = `https://wa.me/${siteConfig.contact.whatsapp}?text=${encodeU
             </svg>
             Agendar pelo WhatsApp
           </a>
-          <a href="/artes" class="btn btn--outline">Ver Galeria</a>
+          <a href={withBase('/artes')} class="btn btn--outline">Ver Galeria</a>
         </div>
       )}
     </div>
