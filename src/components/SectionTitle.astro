@@ -1,0 +1,39 @@
+---
+interface Props {
+  label?: string;
+  title: string;
+  subtitle?: string;
+  align?: 'left' | 'center';
+}
+
+const { label, title, subtitle, align = 'left' } = Astro.props;
+---
+
+<div class:list={['section-title-block', `align-${align}`]}>
+  {label && <p class="section-label">{label}</p>}
+  <h2>{title}</h2>
+  <div class:list={['gold-line', { 'gold-line--center': align === 'center' }]}></div>
+  {subtitle && <p class="section-subtitle">{subtitle}</p>}
+</div>
+
+<style>
+  .section-title-block { margin-bottom: 3.5rem; }
+  .align-center { text-align: center; }
+  .align-center .section-label { justify-content: center; }
+
+  .section-label {
+    margin-bottom: 1rem;
+  }
+
+  .section-subtitle {
+    color: var(--gray-4);
+    font-size: 1.1rem;
+    font-style: italic;
+    margin-top: 0.5rem;
+  }
+
+  .align-center .section-subtitle {
+    margin-left: auto;
+    margin-right: auto;
+  }
+</style>

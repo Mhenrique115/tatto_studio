@@ -1,0 +1,119 @@
+---
+import type { Tattoo, TattooCategory } from '../data/arts';
+
+interface Props {
+  tattoos: Tattoo[];
+  categories: TattooCategory[];
+  preview?: boolean;
+}
+
+const { tattoos, categories, preview = false } = Astro.props;
+const displayTattoos = preview ? tattoos.slice(0, 6) : tattoos;
+---
+
+{!preview && (
+  <div class="filter-tabs">
+    <button class="filter-tab active" data-filter="all">Todas</button>
+    {categories.map(cat => (
+      <button class="filter-tab" data-filter={cat}>{cat}</button>
+    ))}
+  </div>
+)}
+
+<div class="gallery-grid" id="art-gallery">
+  {displayTattoos.map(tattoo => (
+    <div
+      class="gallery-item"
+      data-category={tattoo.category}
+      data-title={tattoo.title}
+      data-description={tattoo.description}
+      data-client={tattoo.clientNote}
+      data-image={tattoo.image}
+      role="button"
+      tabindex="0"
+      aria-label={`Ver detalhes: ${tattoo.title}`}
+    >
+      <img src={tattoo.image} alt={tattoo.title} loading="lazy" />
+      <div class="gallery-item-overlay">
+        <p class="item-category">{tattoo.category}</p>
+        <p class="item-title">{tattoo.title}</p>
+        <span class="item-zoom">+</span>
+      </div>
+    </div>
+  ))}
+</div>
+
+<script>
+  // Filter functionality
+  const filterTabs = document.querySelectorAll('.filter-tab');
+  const items = document.querySelectorAll('#art-gallery .gallery-item');
+
+  filterTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const filter = tab.getAttribute('data-filter');
+      filterTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+
+      items.forEach(item => {
+        const category = item.getAttribute('data-category');
+        const show = filter === 'all' || category === filter;
+        (item as HTMLElement).style.display = show ? 'block' : 'none';
+      });
+    });
+  });
+
+  // Open modal on click
+  items.forEach(item => {
+    const trigger = () => {
+      if (window.openGalleryModal) {
+        window.openGalleryModal({
+          title: item.getAttribute('data-title'),
+          category: item.getAttribute('data-category'),
+          description: item.getAttribute('data-description'),
+          clientNote: item.getAttribute('data-client'),
+          image: item.getAttribute('data-image'),
+        });
+      }
+    };
+    item.addEventListener('click', trigger);
+    item.addEventListener('keydown', (e) => {
+      if ((e as KeyboardEvent).key === 'Enter') trigger();
+    });
+  });
+</script>
+
+<style>
+  .item-category {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.25rem;
+  }
+
+  .item-title {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    letter-spacing: 0.04em;
+    color: var(--white);
+  }
+
+  .item-zoom {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 32px;
+    height: 32px;
+    border: 1px solid rgba(245, 240, 235, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: var(--white);
+    opacity: 0;
+    transition: var(--transition);
+  }
+
+  .gallery-item:hover .item-zoom { opacity: 1; }
+</style>

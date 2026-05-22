@@ -1,0 +1,135 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ArtGallery from '../components/ArtGallery.astro';
+import GalleryModal from '../components/GalleryModal.astro';
+import ContactSection from '../components/ContactSection.astro';
+import WhatsAppButton from '../components/WhatsAppButton.astro';
+import SectionTitle from '../components/SectionTitle.astro';
+import { tattoos, tattooCategories } from '../data/arts';
+import { siteConfig } from '../data/siteConfig';
+---
+
+<BaseLayout title="Galeria de Artes" description="Galeria completa de tatuagens do Noir Ink Studio.">
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="container">
+      <p class="section-label">Portfólio</p>
+      <h1>Galeria de<br/>Tatuagens</h1>
+      <div class="gold-line"></div>
+      <p class="page-header-sub">
+        Cada peça conta uma história única. Explore nosso portfólio por estilo
+        e encontre a referência perfeita para a sua próxima arte.
+      </p>
+    </div>
+    <div class="header-bg">
+      <img src="https://images.unsplash.com/photo-1565058379802-bbe93b2f703a?w=1400&q=80" alt="" loading="eager" />
+      <div class="header-overlay"></div>
+    </div>
+  </div>
+
+  <!-- Gallery -->
+  <section class="section gallery-section">
+    <div class="container">
+      <ArtGallery tattoos={tattoos} categories={tattooCategories} />
+    </div>
+  </section>
+
+  <!-- Budget CTA -->
+  <section class="budget-cta">
+    <div class="container cta-row">
+      <div>
+        <h3>Gostou do que viu?</h3>
+        <p>Envie sua referência e receba um orçamento personalizado.</p>
+      </div>
+      <a
+        href={`https://wa.me/${siteConfig.contact.whatsapp}?text=${encodeURIComponent('Olá, gostei das tatuagens da galeria. Pode me passar um orçamento?')}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn btn--gold"
+      >
+        Solicitar Orçamento
+      </a>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <ContactSection />
+
+  <!-- Floating WA -->
+  <WhatsAppButton />
+
+  <!-- Modal -->
+  <GalleryModal />
+</BaseLayout>
+
+<style>
+  .page-header {
+    position: relative;
+    padding: 12rem 0 6rem;
+    overflow: hidden;
+  }
+
+  .header-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .header-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .header-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(8, 8, 8, 0.97) 0%,
+      rgba(8, 8, 8, 0.8) 60%,
+      rgba(8, 8, 8, 0.6) 100%
+    );
+  }
+
+  .page-header .container { position: relative; z-index: 1; }
+
+  .page-header-sub {
+    color: var(--gray-4);
+    font-style: italic;
+    font-size: 1rem;
+    max-width: 50ch;
+    margin-top: 0.5rem;
+  }
+
+  .gallery-section { background: var(--black); }
+
+  .budget-cta {
+    background: var(--black-2);
+    border-top: 1px solid var(--gray-1);
+    border-bottom: 1px solid var(--gray-1);
+    padding: 3rem 0;
+  }
+
+  .cta-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .cta-row h3 {
+    font-size: 1.8rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .cta-row p {
+    color: var(--gray-4);
+    font-style: italic;
+    font-size: 0.95rem;
+    max-width: none;
+  }
+</style>

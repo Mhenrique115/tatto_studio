@@ -1,0 +1,104 @@
+---
+import { faqs } from '../data/faq';
+import SectionTitle from './SectionTitle.astro';
+---
+
+<section class="section faq-section" id="faq">
+  <div class="container">
+    <SectionTitle
+      label="Dúvidas Frequentes"
+      title="FAQ"
+      subtitle="Tudo que você precisa saber antes de tatuar."
+      align="center"
+    />
+
+    <div class="faq-list">
+      {faqs.map((faq, i) => (
+        <details class="faq-item" id={`faq-${faq.id}`}>
+          <summary class="faq-question">
+            <span class="faq-num">{String(i + 1).padStart(2, '0')}</span>
+            <span>{faq.question}</span>
+            <span class="faq-toggle">+</span>
+          </summary>
+          <div class="faq-answer">
+            <p>{faq.answer}</p>
+          </div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll('.faq-item').forEach(item => {
+    const toggle = item.querySelector('.faq-toggle');
+    item.addEventListener('toggle', () => {
+      if (toggle) toggle.textContent = (item as HTMLDetailsElement).open ? '−' : '+';
+    });
+  });
+</script>
+
+<style>
+  .faq-section { background: var(--black); }
+
+  .faq-list {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .faq-item {
+    border-bottom: 1px solid var(--gray-1);
+    overflow: hidden;
+  }
+
+  .faq-item:first-child { border-top: 1px solid var(--gray-1); }
+
+  .faq-question {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem 0;
+    cursor: pointer;
+    list-style: none;
+    transition: var(--transition);
+    color: var(--white);
+    font-size: 1rem;
+  }
+
+  .faq-question::-webkit-details-marker { display: none; }
+
+  .faq-question:hover { color: var(--gold); }
+
+  .faq-num {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+    flex-shrink: 0;
+  }
+
+  .faq-question > span:nth-child(2) { flex: 1; }
+
+  .faq-toggle {
+    font-family: var(--font-mono);
+    font-size: 1.2rem;
+    color: var(--gold);
+    flex-shrink: 0;
+    transition: var(--transition);
+    line-height: 1;
+  }
+
+  .faq-answer {
+    padding: 0 0 1.5rem 3.25rem;
+  }
+
+  .faq-answer p {
+    color: var(--gray-4);
+    font-size: 0.95rem;
+    line-height: 1.8;
+    max-width: 65ch;
+  }
+</style>

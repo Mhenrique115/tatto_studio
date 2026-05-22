@@ -1,0 +1,366 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionTitle from '../components/SectionTitle.astro';
+import WhatsAppButton from '../components/WhatsAppButton.astro';
+import { artist } from '../data/artist';
+import { siteConfig } from '../data/siteConfig';
+
+const whatsappMsg = `Olá ${artist.name}! Quero agendar uma tatuagem com você.`;
+const whatsappUrl = `https://wa.me/${siteConfig.contact.whatsapp}?text=${encodeURIComponent(whatsappMsg)}`;
+---
+
+<BaseLayout title={`${artist.name} — Artista`} description={`Conheça ${artist.name}, artista principal do ${siteConfig.name}`}>
+
+  <!-- Artist Hero -->
+  <section class="artist-hero">
+    <div class="artist-hero-bg">
+      <img src={artist.photoCover} alt={artist.name} loading="eager" />
+      <div class="hero-overlay"></div>
+    </div>
+    <div class="container artist-hero-content">
+      <p class="section-label">{siteConfig.name}</p>
+      <h1>{artist.name}</h1>
+      <div class="gold-line"></div>
+      <p class="artist-role">{artist.role}</p>
+      <p class="artist-nickname">"{artist.nickname}"</p>
+    </div>
+  </section>
+
+  <!-- Artist Bio -->
+  <section class="section artist-bio-section">
+    <div class="container">
+      <div class="bio-grid">
+        <div class="bio-image-col">
+          <div class="bio-image-frame">
+            <img src={artist.photo} alt={artist.name} loading="lazy" />
+          </div>
+
+          <div class="achievements-box">
+            <h4 class="ach-title">Conquistas</h4>
+            <ul class="ach-list">
+              {artist.achievements.map(a => (
+                <li class="ach-item">
+                  <span class="ach-bullet">✦</span>
+                  {a}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <div class="bio-content">
+          <SectionTitle label="Trajetória" title="Sobre o Artista" />
+
+          <div class="bio-paragraphs">
+            {artist.bio.split('\n\n').map(paragraph => (
+              <p>{paragraph}</p>
+            ))}
+          </div>
+
+          <blockquote class="artist-quote-full">
+            <p>"{artist.quote}"</p>
+            <cite>— {artist.nickname}</cite>
+          </blockquote>
+
+          <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" class="btn btn--gold">
+            Agendar com {artist.name.split(' ')[0]}
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Specialties -->
+  <section class="section specialties-section">
+    <div class="container">
+      <SectionTitle
+        label="Estilos"
+        title="Especialidades"
+        subtitle="Técnicas dominadas com anos de prática e dedicação."
+        align="center"
+      />
+
+      <div class="specialties-grid">
+        {artist.specialties.map((spec, i) => (
+          <div class="specialty-card">
+            <div class="spec-header">
+              <span class="spec-icon">{spec.icon}</span>
+              <div>
+                <h3 class="spec-name">{spec.name}</h3>
+              </div>
+            </div>
+            <p class="spec-desc">{spec.description}</p>
+            {spec.examples.length > 0 && (
+              <div class="spec-examples">
+                {spec.examples.map(ex => (
+                  <div class="spec-example-img">
+                    <img src={ex} alt={`Exemplo ${spec.name}`} loading="lazy" />
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section artist-cta">
+    <div class="container cta-inner">
+      <h2>Pronto para criar algo único?</h2>
+      <p>Entre em contato e vamos conversar sobre sua ideia.</p>
+      <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" class="btn btn--gold">
+        Agendar pelo WhatsApp
+      </a>
+    </div>
+  </section>
+
+  <WhatsAppButton message={whatsappMsg} />
+</BaseLayout>
+
+<style>
+  .artist-hero {
+    position: relative;
+    min-height: 80vh;
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 5rem;
+  }
+
+  .artist-hero-bg {
+    position: absolute;
+    inset: 0;
+  }
+
+  .artist-hero-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 20%;
+  }
+
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      rgba(8, 8, 8, 1) 0%,
+      rgba(8, 8, 8, 0.7) 40%,
+      rgba(8, 8, 8, 0.2) 100%
+    );
+  }
+
+  .artist-hero-content {
+    position: relative;
+    z-index: 1;
+  }
+
+  .artist-role {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gray-3);
+    margin-top: 0.5rem;
+  }
+
+  .artist-nickname {
+    color: var(--gold);
+    font-style: italic;
+    font-size: 1.1rem;
+    margin-top: 0.3rem;
+  }
+
+  /* Bio section */
+  .artist-bio-section { background: var(--black-2); }
+
+  .bio-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 5rem;
+    align-items: start;
+  }
+
+  .bio-image-frame {
+    position: relative;
+    aspect-ratio: 3/4;
+    overflow: hidden;
+    margin-bottom: 2rem;
+  }
+
+  .bio-image-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .bio-image-frame::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 1px solid var(--gold-dark);
+    pointer-events: none;
+    transform: translate(8px, 8px);
+  }
+
+  .achievements-box {
+    background: var(--black-3);
+    border: 1px solid var(--gray-1);
+    padding: 1.5rem;
+  }
+
+  .ach-title {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1rem;
+  }
+
+  .ach-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .ach-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.85rem;
+    color: var(--gray-4);
+  }
+
+  .ach-bullet { color: var(--gold); font-size: 0.5rem; }
+
+  .bio-paragraphs {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+  }
+
+  .bio-paragraphs p {
+    color: var(--gray-4);
+    font-size: 1rem;
+    line-height: 1.9;
+    max-width: none;
+  }
+
+  .artist-quote-full {
+    border-left: 2px solid var(--gold);
+    padding-left: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .artist-quote-full p {
+    font-size: 1.1rem;
+    font-style: italic;
+    color: var(--white-dim);
+    max-width: none;
+  }
+
+  .artist-quote-full cite {
+    display: block;
+    margin-top: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+    font-style: normal;
+  }
+
+  /* Specialties */
+  .specialties-section { background: var(--black); }
+
+  .specialties-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .specialty-card {
+    background: var(--black-3);
+    border: 1px solid var(--gray-1);
+    padding: 2rem;
+    transition: var(--transition);
+  }
+
+  .specialty-card:hover {
+    border-color: var(--gold-dark);
+    box-shadow: var(--shadow-gold);
+  }
+
+  .spec-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .spec-icon { font-size: 2rem; }
+
+  .spec-name {
+    font-size: 1.5rem;
+    color: var(--white);
+  }
+
+  .spec-desc {
+    color: var(--gray-4);
+    font-size: 0.9rem;
+    line-height: 1.7;
+    margin-bottom: 1.25rem;
+    max-width: none;
+  }
+
+  .spec-examples {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+
+  .spec-example-img {
+    aspect-ratio: 1;
+    overflow: hidden;
+  }
+
+  .spec-example-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .spec-example-img:hover img { transform: scale(1.08); }
+
+  /* CTA */
+  .artist-cta {
+    background: var(--black-2);
+    border-top: 1px solid var(--gray-1);
+  }
+
+  .cta-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1rem;
+  }
+
+  .cta-inner p {
+    color: var(--gray-4);
+    font-style: italic;
+    margin-bottom: 1rem;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  @media (max-width: 900px) {
+    .bio-grid { grid-template-columns: 1fr; }
+    .specialties-grid { grid-template-columns: 1fr; }
+  }
+</style>

@@ -1,0 +1,224 @@
+---
+import { siteConfig } from '../data/siteConfig';
+
+const navLinks = [
+  { label: 'Início', href: '/' },
+  { label: 'Artista', href: '/artista' },
+  { label: 'Artes', href: '/artes' },
+  ...(siteConfig.showPiercing ? [{ label: 'Piercing', href: '/piercing' }] : []),
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<header class="site-header" id="site-header">
+  <div class="container header-inner">
+    <a href="/" class="header-logo">
+      <span class="logo-mark">✦</span>
+      <span class="logo-text">{siteConfig.name}</span>
+    </a>
+
+    <nav class="header-nav" aria-label="Navegação principal">
+      {navLinks.map(link => (
+        <a
+          href={link.href}
+          class:list={['nav-link', { active: currentPath === link.href || (link.href !== '/' && currentPath.startsWith(link.href)) }]}
+        >
+          {link.label}
+        </a>
+      ))}
+    </nav>
+
+    <a
+      href={`https://wa.me/${siteConfig.contact.whatsapp}?text=${encodeURIComponent('Olá! Quero agendar uma tatuagem.')}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="btn btn--gold header-cta"
+    >
+      Agendar
+    </a>
+
+    <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+
+  <nav class="mobile-nav" id="mobile-nav" aria-hidden="true">
+    {navLinks.map(link => (
+      <a href={link.href} class="mobile-nav-link">{link.label}</a>
+    ))}
+    <a
+      href={`https://wa.me/${siteConfig.contact.whatsapp}?text=${encodeURIComponent('Olá! Quero agendar uma tatuagem.')}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="btn btn--gold"
+    >
+      Agendar pelo WhatsApp
+    </a>
+  </nav>
+</header>
+
+<script>
+  const header = document.getElementById('site-header')!;
+  const hamburger = document.getElementById('hamburger')!;
+  const mobileNav = document.getElementById('mobile-nav')!;
+
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 50);
+  });
+
+  hamburger.addEventListener('click', () => {
+    const isOpen = hamburger.classList.toggle('open');
+    mobileNav.classList.toggle('open', isOpen);
+    hamburger.setAttribute('aria-expanded', String(isOpen));
+    mobileNav.setAttribute('aria-hidden', String(!isOpen));
+  });
+</script>
+
+<style>
+  .site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    transition: all 0.4s ease;
+    padding: 1.5rem 0;
+  }
+
+  .site-header.scrolled {
+    background: rgba(8, 8, 8, 0.95);
+    backdrop-filter: blur(20px);
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(201, 168, 76, 0.15);
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+
+  .header-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+  }
+
+  .logo-mark {
+    color: var(--gold);
+    font-size: 1.25rem;
+  }
+
+  .logo-text {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    letter-spacing: 0.08em;
+    color: var(--white);
+  }
+
+  .header-nav {
+    display: flex;
+    align-items: center;
+    gap: 2.5rem;
+  }
+
+  .nav-link {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gray-4);
+    transition: var(--transition);
+    position: relative;
+  }
+
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--gold);
+    transition: var(--transition);
+  }
+
+  .nav-link:hover,
+  .nav-link.active {
+    color: var(--white);
+  }
+
+  .nav-link:hover::after,
+  .nav-link.active::after {
+    width: 100%;
+  }
+
+  .nav-link.active {
+    color: var(--gold);
+  }
+
+  .header-cta {
+    padding: 0.6rem 1.5rem;
+    font-size: 0.75rem;
+  }
+
+  /* Hamburger */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem;
+  }
+
+  .hamburger span {
+    display: block;
+    width: 24px;
+    height: 1px;
+    background: var(--white);
+    transition: var(--transition);
+    transform-origin: center;
+  }
+
+  .hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+  /* Mobile Nav */
+  .mobile-nav {
+    display: none;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.5rem 1.25rem 2rem;
+    background: var(--black-2);
+    border-top: 1px solid var(--gray-1);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+  }
+
+  .mobile-nav.open { max-height: 400px; }
+
+  .mobile-nav-link {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gray-4);
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--gray-1);
+  }
+
+  @media (max-width: 900px) {
+    .header-nav, .header-cta { display: none; }
+    .hamburger { display: flex; }
+    .mobile-nav { display: flex; }
+  }
+</style>

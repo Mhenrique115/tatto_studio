@@ -1,0 +1,264 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import ArtistPreview from '../components/ArtistPreview.astro';
+import ArtGallery from '../components/ArtGallery.astro';
+import GalleryModal from '../components/GalleryModal.astro';
+import ContactSection from '../components/ContactSection.astro';
+import LocationSection from '../components/LocationSection.astro';
+import TestimonialSection from '../components/TestimonialSection.astro';
+import FAQSection from '../components/FAQSection.astro';
+import WhatsAppButton from '../components/WhatsAppButton.astro';
+import SectionTitle from '../components/SectionTitle.astro';
+import { siteConfig } from '../data/siteConfig';
+import { tattoos, tattooCategories } from '../data/arts';
+import { piercings } from '../data/piercings';
+---
+
+<BaseLayout>
+  <!-- Hero -->
+  <Hero />
+
+  <!-- About Studio -->
+  <section class="section about-studio" id="sobre">
+    <div class="container about-grid">
+      <div class="about-text">
+        <SectionTitle label="Sobre o Estúdio" title={siteConfig.name} />
+        <p class="about-description">{siteConfig.description}</p>
+        <div class="about-stats">
+          <div class="stat">
+            <span class="stat-number">12+</span>
+            <span class="stat-label">Anos de Experiência</span>
+          </div>
+          <div class="stat">
+            <span class="stat-number">1.5k</span>
+            <span class="stat-label">Tatuagens Realizadas</span>
+          </div>
+          <div class="stat">
+            <span class="stat-number">100%</span>
+            <span class="stat-label">Satisfação Garantida</span>
+          </div>
+        </div>
+      </div>
+      <div class="about-images">
+        <div class="about-img about-img--main">
+          <img src="https://images.unsplash.com/photo-1598971861713-54ad16a7e72e?w=700&q=80" alt="Trabalho do estúdio" loading="lazy" />
+        </div>
+        <div class="about-img about-img--small">
+          <img src="https://images.unsplash.com/photo-1562259929-b4e1fd3aef09?w=400&q=80" alt="Ambiente do estúdio" loading="lazy" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Artist Preview -->
+  <ArtistPreview />
+
+  <!-- Arts Preview -->
+  <section class="section" id="artes">
+    <div class="container">
+      <div class="section-header-row">
+        <SectionTitle label="Galeria" title="Nossas Artes" subtitle="Uma seleção dos nossos melhores trabalhos." />
+        <a href="/artes" class="btn btn--outline">Ver Galeria Completa</a>
+      </div>
+      <ArtGallery tattoos={tattoos} categories={tattooCategories} preview={true} />
+    </div>
+  </section>
+
+  <!-- Piercing Preview -->
+  {siteConfig.showPiercing && (
+    <section class="section piercing-preview" id="piercings">
+      <div class="container">
+        <div class="section-header-row">
+          <SectionTitle label="Serviços" title="Piercings" subtitle="Piercings realizados com materiais certificados e técnica segura." />
+          <a href="/piercing" class="btn btn--outline">Ver Todos</a>
+        </div>
+        <div class="gallery-grid">
+          {piercings.slice(0, 4).map(p => (
+            <div class="gallery-item piercing-thumb">
+              <img src={p.image} alt={p.title} loading="lazy" />
+              <div class="gallery-item-overlay">
+                <p class="item-cat">{p.category}</p>
+                <p class="item-ttl">{p.title}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Testimonials -->
+  <TestimonialSection />
+
+  <!-- Location -->
+  <LocationSection />
+
+  <!-- CTA -->
+  <section class="section cta-section">
+    <div class="container cta-inner">
+      <div class="gold-line gold-line--center"></div>
+      <h2 class="cta-title">Pronto para sua próxima arte?</h2>
+      <p class="cta-sub">Agende uma consulta gratuita e vamos criar algo único juntos.</p>
+      <a
+        href={`https://wa.me/${siteConfig.contact.whatsapp}?text=${encodeURIComponent('Olá! Quero agendar uma tatuagem.')}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn btn--gold"
+      >
+        Faça sua Reserva Agora
+      </a>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <ContactSection />
+
+  <!-- FAQ -->
+  <FAQSection />
+
+  <!-- Floating WA -->
+  <WhatsAppButton />
+
+  <!-- Modal -->
+  <GalleryModal />
+</BaseLayout>
+
+<style>
+  .about-studio { background: var(--black); }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+  }
+
+  .about-description {
+    color: var(--gray-4);
+    margin-bottom: 2.5rem;
+    font-size: 1rem;
+    line-height: 1.9;
+  }
+
+  .about-stats {
+    display: flex;
+    gap: 2.5rem;
+    flex-wrap: wrap;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .stat-number {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gray-3);
+  }
+
+  .about-images {
+    position: relative;
+    height: 500px;
+  }
+
+  .about-img {
+    position: absolute;
+    overflow: hidden;
+  }
+
+  .about-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .about-img--main {
+    width: 75%;
+    height: 80%;
+    top: 0;
+    right: 0;
+  }
+
+  .about-img--small {
+    width: 50%;
+    height: 50%;
+    bottom: 0;
+    left: 0;
+    border: 4px solid var(--black);
+  }
+
+  .section-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 3.5rem;
+  }
+
+  .section-header-row .section-title-block {
+    margin-bottom: 0;
+  }
+
+  .piercing-preview { background: var(--black-2); }
+
+  .item-cat {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.25rem;
+  }
+
+  .item-ttl {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    color: var(--white);
+  }
+
+  .cta-section {
+    background: var(--black-2);
+    border-top: 1px solid var(--gray-1);
+    border-bottom: 1px solid var(--gray-1);
+  }
+
+  .cta-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1rem;
+  }
+
+  .cta-title {
+    margin-top: 0.5rem;
+    font-size: clamp(2rem, 5vw, 4rem);
+  }
+
+  .cta-sub {
+    color: var(--gray-4);
+    font-style: italic;
+    margin-bottom: 1rem;
+    max-width: 45ch;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  @media (max-width: 900px) {
+    .about-grid { grid-template-columns: 1fr; }
+    .about-images { height: 320px; }
+    .section-header-row { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+  }
+</style>
